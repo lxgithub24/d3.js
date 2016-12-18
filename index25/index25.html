@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2014 China Car Accounting</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+
+<body>
+<script>
+    var width = 900,
+    	height = 500,
+    	margin = 50;
+
+    var commasFormatter = d3.format(",.0f");
+
+    var xScale = d3.scale.linear()
+				.domain([100,13000])
+				.rangeRound([margin, width-margin]),
+		yScale = d3.scale.log()
+				.domain([0.5,200])
+				.rangeRound([height-margin, margin]),
+		rScale = d3.scale.linear()
+				.domain([0,1800000])
+				.rangeRound([15, 100]);
+
+    var colorScale = d3.scale.linear()
+				.domain([20000, 400000, 1000000, 1600000])
+				.range(["#2E8ECE", "#40D47E", "#E98B39", "#D14233"]);
+
+    var xAxis = d3.svg.axis()
+            .scale(xScale)
+            .orient("bottom")
+            .tickFormat(function(d) { return d + " 万人"; });
+
+    var yAxis = d3.svg.axis()
+            .scale(yScale)
+            .orient("left")
+            .ticks(7)
+            .tickFormat(function(d) { return d; })
+            .tickValues([0.5, 35, 70, 100, 135, 170, 200]);
+
+    var div = d3.select("body").append("div")
+			.attr("class", "tooltip")
+			.style("opacity", 0);   
+
+    svg = d3.select("body").append("svg")
+    		.attr("width", width)
+    		.attr("height", height);
+
+    svg.append("g")       
+        .attr("class", "axis")
+        .attr("transform", function(){ 
+            return "translate(0, " + (height / 2) + ")";
+        })
+        .call(xAxis)
+        .append("text")
+    	.attr("x", width - 20)
+    	.attr("y", 2)
+    	.style("text-anchor", "middle")
+    	.attr("font-size", "10px")
+    	.text("各省人口");
+    
+    svg.append("g")       
+        .attr("class", "axis")
+        .attr("transform", function(){ 
+            return "translate(" + margin + ", 0)";
+        })
+        .call(yAxis)
+        .append("text")
+		.attr("transform", "rotate(-90)")
+		.attr("x", -250)
+		.attr("y", -20)
+		.attr("dy", ".5em")
+		.style("text-anchor", "middle")
+		.text("各省土地面积（万平方公里）");
+
+    d3.json("data.json", function (data) {
+		svg.selectAll("text.label")
+			.data(data)
+			.enter()
+			.append("text")
+			.attr("class", "label")
+			.text(function (d) {
+					return d.province;
+			})
+			.attr("style", "text-anchor:middle")
+			.attr("x", function (d) {
+					return xScale(d.people);
+			})
+			.attr("y", function (d) {
+					return yScale(d.land);
+			});
+
+		svg.selectAll("circle")
+			.data(data)
+			.enter()
+			.append("circle")
+			.attr("class","bubble")
+			.style("stroke", function (d) {
+					return colorScale(d.car);
+			})
+			.style("fill", function (d) {
+					return colorScale(d.car);
+			})
+			.attr("cx", function (d) {
+					return xScale(d.people);
+			})
+			.attr("cy", function (d) {
+					return yScale(d.land);
+			})
+			.attr("r", function (d) {
+					return rScale(d.car);
+			})
+                        .on("mouseover", function(d) {
+					div.transition()
+					.duration(200)
+					.style("opacity", .9);
+					div.html(d.car + "辆" + "<br/>" + d.province)
+					.style("left", (d3.event.pageX) + "px")
+					.style("top", (d3.event.pageY - 28) + "px");
+			})
+			.on("mouseout", function(d) {
+					div.transition()
+					.duration(500)
+					.style("opacity", 0);
+			}); 
+
+    });
+
+</script>
+</body>
+
+</html>
