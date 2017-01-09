@@ -29,7 +29,7 @@
 <script>
 
 var width = 600;
-var height = 1500;
+var height = 500;
 
 //边界空白
 var padding = {left: 80, right:50, top: 20, bottom: 20 };
@@ -49,8 +49,9 @@ var tree = d3.layout.tree()
 var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; });
 
-
-d3.json("learn.json",function(error,root){
+$root = {"name":"heze","children":[{"name":"caoxian","children":[{"name":"guyingji"},{"name":"zhangpozhong"},
+	{"name":"libentun"},{"name":"sunnnnlaojia"}]},{"name":"dingtao"},{"name":"juye"},{"name":"mudanqu"},{"name":"shanxian"}]};
+//d3.json("tmp.json",function(error,root){
 
   //给第一个节点添加初始坐标x0和x1
   root.x0 = height / 2;
@@ -190,7 +191,7 @@ d3.json("learn.json",function(error,root){
     }
   }
 
-});
+//});
 
 </script>
 		

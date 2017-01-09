@@ -13,6 +13,17 @@
   	  ] 
   	},
   	
+  	{ 
+	  "name":"预备知识" , 
+  	  "children":
+  	  [
+	  	  	{"name":"HTML & CSS" },
+	  	  	{"name":"JavaScript" },
+	  	  	{"name":"DOM" },
+	  	  	{"name":"SVG" }
+  	  ] 
+  	},
+  	
 	{ 
 		"name":"安装" , 
 		"children":
@@ -74,7 +85,44 @@
 		] 
 	},
 	
-	{ 
+
+{ 
+		"name":"入门",
+		"children":
+		[
+			{
+				"name":"选择集",
+				"children":
+				[
+					{"name":"select"},
+					{"name":"selectAll"}
+				]
+			},
+			{
+				"name":"绑定数据",
+				"children":
+				[
+					{"name":"datum"},
+					{"name":"data"}
+				]
+			},
+			{"name":"添加删除元素"},
+			{
+				"name":"简单图形",
+				"children":
+				[
+					{"name":"柱形图"},
+					{"name":"折线图"},
+					{"name":"散点图"}
+				]
+			},
+			{"name":"比例尺"},
+			{"name":"生成器"},
+			{"name":"过渡"}
+		] 
+	},
+
+{ 
 		"name":"入门",
 		"children":
 		[
@@ -110,6 +158,42 @@
 		] 
 	},
 	
+	{ 
+		"name":"入门",
+		"children":
+		[
+			{
+				"name":"选择集",
+				"children":
+				[
+					{"name":"select"},
+					{"name":"selectAll"}
+				]
+			},
+			{
+				"name":"绑定数据",
+				"children":
+				[
+					{"name":"datum"},
+					{"name":"data"}
+				]
+			},
+			{"name":"添加删除元素"},
+			{
+				"name":"简单图形",
+				"children":
+				[
+					{"name":"柱形图"},
+					{"name":"折线图"},
+					{"name":"散点图"}
+				]
+			},
+			{"name":"比例尺"},
+			{"name":"生成器"},
+			{"name":"过渡"}
+		] 
+	},
+
 	{ 
 		"name":"进阶" , 
 		"children":

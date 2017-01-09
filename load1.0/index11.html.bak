@@ -1,0 +1,16 @@
+﻿
+<html>  
+  <head>  
+        <meta charset="utf-8">  
+        <title>思维导图</title>  
+  </head> 
+<body>
+	
+<form action="check.php" method="post">  
+    <input type="text" name="input"/>  
+    <br/>
+    <input type="Submit" name="Submit" value="查询"/>
+</form> 	
+
+</body>  
+</html>  
