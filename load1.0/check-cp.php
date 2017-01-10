@@ -12,30 +12,45 @@
 				mysql_connect("localhost","root","liuxiang");	//连接数据库
 				mysql_select_db("sikuquanshu");	//选择数据库
 				//mysql_query("set names 'latin1'");	//设定字符集
-				$phparray["name"] = $input;//为数组添加祖先节点的name属性
-				$phparray["children"] = array();//为数组添加祖先节点的children属性
-				$sql = "select * from province where fatherid=(select id from province where value='$_POST[input]')";	//SQL语句
+				$sql = "select id from province where value='$_POST[input]'";	//SQL语句
 				$query = mysql_query($sql);	//执行SQL语句
-				$i = 0;
-				$firstGeneration = array();
-				while($row=mysql_fetch_row($query, MYSQL_ASSOC)){//为数组添加祖先节点的子节点
-					$firstGeneration[$i]=$row["value"];
-					$phparray["children"][$i++]["name"]=$row["value"];
-        }
-        for($j = 0; $j < $i ; $j++){
-        	$sql = "select * from province where fatherid=(select id from province where value='".$firstGeneration[$j]."')";	//SQL语句
+				if (mysql_num_rows($query) < 1) {  
+  				echo "<script>alert('无此条记录！');</script>";
+				}
+				else{
+					$sql = "select * from province where fatherid=(select id from province where value='$_POST[input]')";	//SQL语句
 					$query = mysql_query($sql);	//执行SQL语句
-					$k=0;
+					$leaf_num = 1;//叶结点个数
+					$phparray["name"] = $input;//为数组添加祖先节点的name属性
+					$phparray["children"] = array();//为数组添加祖先节点的children属性
+					$i = 0;
+					$firstGeneration = array();
 					while($row=mysql_fetch_row($query, MYSQL_ASSOC)){//为数组添加祖先节点的子节点
-						if($k==0){
-							$phparray["children"][$j]["children"]=array();
+						$firstGeneration[$i]=$row["value"];
+						$phparray["children"][$i++]["name"]=$row["value"];
+	        }
+	        for($j = 0; $j < $i ; $j++){
+	        	$sql = "select * from province where fatherid=(select id from province where value='".$firstGeneration[$j]."')";	//SQL语句
+						$query = mysql_query($sql);	//执行SQL语句
+						$numofmysqlrows = mysql_num_rows($query);
+						if($numofmysqlrows<1){
+							$leaf_num++;
 						}
-						$phparray["children"][$j]["children"][$k++]["name"]=$row["value"];
-					}
-        }
-        $phparraybianliang = json_encode($phparray);
-        //echo json_encode($phparray);
-        echo $phparraybianliang;
+						else{
+							$leaf_num+=$numofmysqlrows;
+						}
+						$k=0;
+						while($row=mysql_fetch_row($query, MYSQL_ASSOC)){//为数组添加祖先节点的子节点
+							if($k==0){
+								$phparray["children"][$j]["children"]=array();
+							}
+							$phparray["children"][$j]["children"][$k++]["name"]=$row["value"];
+						}
+	        }
+	        $phparraybianliang = json_encode($phparray);
+	        //echo json_encode($phparray);
+	        //echo $phparraybianliang;
+	      }
 		}
 	}
 	else
@@ -66,13 +81,16 @@
   </style>
 
 
-<input type="text" name="userId" id="userId" value='<?php echo $phparraybianliang; ?>' style="display:none;">
+<input type="text" name="userId" id="JSON" value='<?php echo $phparraybianliang; ?>' style="display:none;">
+
+<input type="text" name="userId" id="LEAFNUM" value='<?php echo $leaf_num; ?>' style="display:none;">
 
 <script src="d3.v3.min.js"></script>
 <script>
 
 var width = 600;
-var height = 500;
+
+var height = 50*(document.getElementById("LEAFNUM").value);
 
 //边界空白
 var padding = {left: 80, right:50, top: 20, bottom: 20 };
@@ -92,7 +110,7 @@ var tree = d3.layout.tree()
 var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; });
 
-var root = JSON.parse(document.getElementById("userId").value);
+var root = JSON.parse(document.getElementById("JSON").value);
 //root = JSON.parse(root);  
 //alert(root);
 //root = JSON.stringify(obj);

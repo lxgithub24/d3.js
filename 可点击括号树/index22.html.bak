@@ -25,17 +25,10 @@
   </style>
   </head> 
 <body>
-	
-<form action="check.php" method="post">  
-    <input type="text" name="input"/>  
-    <br/>
-    <input type="Submit" name="Submit" value="查询"/>
-</form> 	
-	
 <script src="../d3.v3.min.js"></script>
 <script>
 
-var width = 600;
+var width = 1900;
 var height = 500;
 
 //边界空白
@@ -56,9 +49,8 @@ var tree = d3.layout.tree()
 var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; });
 
-var root = {"name":"heze","children":[{"name":"caoxian","children":[{"name":"guyingji"},{"name":"zhangpozhong"},
-	{"name":"libentun"},{"name":"sunnnnlaojia"}]},{"name":"dingtao"},{"name":"juye"},{"name":"mudanqu"},{"name":"shanxian"}]};
-//d3.json("tmp.json",function(error,root){
+
+d3.json("learn.json",function(error,root){
 
   //给第一个节点添加初始坐标x0和x1
   root.x0 = height / 2;
@@ -198,7 +190,7 @@ var root = {"name":"heze","children":[{"name":"caoxian","children":[{"name":"guy
     }
   }
 
-//});
+});
 
 </script>
 		
